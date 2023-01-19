@@ -40,8 +40,8 @@ public class Main {
                 }
 
 
-                System.out.println("The top 3 results are:");
-                for (int i = 0; i < 3; i++) {
+                System.out.println("The top 10 results are:");
+                for (int i = 0; i < 10; i++) {
                     String title = topList.get(i).getAlternative_titles().get("en");
                     if (title.isEmpty())
                         title = topList.get(i).getTitle();
