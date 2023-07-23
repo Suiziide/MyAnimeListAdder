@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
-    private static final String clientId = "ae2594607eb6a3f63aafd6337662e4d0";
+    private static String clientId = null;
     private static Map<String,String> tokenMap;
 
     public static void main(String[] args) {
@@ -85,7 +85,7 @@ public class Main {
 
     private static void init() {
         File tokenFile = new File(System.getProperty("user.home") + "\\MAL\\token.json");
-
+        clientId = getClientId();
         if (tokenFile.isFile()) {
             try {
                 tokenToMap(Files.readString(tokenFile.toPath()));
@@ -104,6 +104,23 @@ public class Main {
         System.out.println("|                   ANIME SEARCH V1.10                  |");
         System.out.println("|                                                       |");
         System.out.println(" ------------------------------------------------------- ");
+    }
+
+    private static String getClientId() {
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url("https://suiz.org/api/mal?client=MALadder")
+                .header("Client", "MALadder")
+                .build();
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readTree(client.newCall(request).execute().body().string())
+            .get("clientId")
+            .asText();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
